@@ -1,0 +1,7 @@
+2023-01-02T22:25:51.126+0800	INFO	/home/goproject/src/zhihu/boot/logger.go:34	init logger successfully
+2023-01-02T22:38:39.362+0800	INFO	/home/goproject/src/zhihu/boot/logger.go:34	init logger successfully
+2023-01-02T22:41:48.982+0800	INFO	/home/goproject/src/zhihu/boot/logger.go:34	init logger successfully
+2023-01-02T22:41:49.082+0800	INFO	/home/goproject/src/zhihu/boot/database.go:29	connect mysql successfully
+2023-01-02T22:56:09.176+0800	INFO	/home/goproject/src/zhihu/boot/logger.go:34	init logger successfully
+2023-01-02T22:56:09.199+0800	INFO	/home/goproject/src/zhihu/boot/database.go:31	connect mysql successfully
+2023-01-02T22:56:09.201+0800	INFO	/home/goproject/src/zhihu/boot/database.go:45	connect redis successfully

@@ -1,0 +1,29 @@
+app:
+  name: "zhihu"
+  mode: "debug"
+  port: "8080"
+  version: "v1"
+database:
+  mysql:
+    addr: "localhost"
+    port: 3306
+    username: "root"
+    password: "zhaoxijun7"
+    db-name: "zhihu"
+  redis:
+    addr: "localhost"
+    port: 6379
+    password: ""
+    db: 0
+    pool-size: 100
+logger:
+  max-size: 10
+  max-groups: 20
+  max-age: 30
+  log-type: "console"
+  save-path: "log"
+
+auth:
+  jwt:
+    expires-time: 604800
+    secret-key: "dODNfSD821dd%%3vdh8"
