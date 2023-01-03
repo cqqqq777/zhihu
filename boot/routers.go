@@ -16,6 +16,7 @@ func InitRouters() {
 	{
 		public.POST("/registration", controller.Register)
 		public.POST("/verification", controller.PostVerification)
+		public.POST("/login", controller.Login)
 	}
 	if err := r.Run(); err != nil {
 		panic(err)

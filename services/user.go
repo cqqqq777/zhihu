@@ -2,6 +2,7 @@ package services
 
 import (
 	"crypto/tls"
+	"errors"
 	"fmt"
 	"gopkg.in/gomail.v2"
 	"math/rand"
@@ -73,7 +74,7 @@ func PostVerification(email string) error {
 	return nil
 }
 
-func Register(ParamUser *model.ParamUser) error {
+func Register(ParamUser *model.ParamRegisterUser) error {
 	//检查用户名是否已存在
 	if err := mysql.CheckUsername(ParamUser.Username); err != nil {
 		return err
@@ -98,4 +99,48 @@ func Register(ParamUser *model.ParamUser) error {
 		Email:    ParamUser.Email,
 	}
 	return mysql.AddUser(user)
+}
+
+func LoginByUsername(user *model.ParamLoginUser) (string, error) {
+	if err := mysql.CheckUsername(user.UsernameOrEmail); !errors.Is(err, mysql.ErrorUserExist) {
+		if err == nil {
+			return "", mysql.ErrorUserNotExist
+		}
+		return "", err
+	}
+	password, err := mysql.FindPasswordByUsername(user.UsernameOrEmail)
+	if err != nil {
+		return "", err
+	}
+	if password != user.Password {
+		return "", mysql.ErrorWrongPassword
+	}
+	uid, err := mysql.FindUid(user.UsernameOrEmail)
+	if err != nil {
+		return "", err
+	}
+	token, _ := utils.GenToken(uid)
+	return token, nil
+}
+
+func LoginByEmail(user *model.ParamLoginUser) (string, error) {
+	if err := mysql.CheckUsername(user.UsernameOrEmail); !errors.Is(err, mysql.ErrorEmailExist) {
+		if err == nil {
+			return "", mysql.ErrorEmailNotExist
+		}
+		return "", err
+	}
+	password, err := mysql.FindPasswordByEmail(user.UsernameOrEmail)
+	if err != nil {
+		return "", err
+	}
+	if password != user.Password {
+		return "", mysql.ErrorWrongPassword
+	}
+	uid, err := mysql.FindUid(user.UsernameOrEmail)
+	if err != nil {
+		return "", err
+	}
+	token, _ := utils.GenToken(uid)
+	return token, nil
 }

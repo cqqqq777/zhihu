@@ -4,13 +4,18 @@ import "time"
 
 const CtxGetUID = "UserID"
 
-type ParamUser struct {
+type ParamRegisterUser struct {
 	Username   string `json:"username" binding:"required"`
 	Email      string `json:"email" binding:"required"`
 	Password   string `json:"password" binding:"required"`
 	RePassword string `json:"re-password" binding:"required"`
 	//验证码
 	Verification int64 `json:"verification" binding:"required"`
+}
+
+type ParamLoginUser struct {
+	UsernameOrEmail string `json:"username/email" binding:"required"`
+	Password        string `json:"password" binding:"required"`
 }
 
 type User struct {

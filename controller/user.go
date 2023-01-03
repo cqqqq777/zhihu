@@ -9,13 +9,15 @@ import (
 	g "zhihu/global"
 	"zhihu/model"
 	"zhihu/services"
+	"zhihu/utils"
 )
 
 // PostVerification 发送验证码
 func PostVerification(c *gin.Context) {
 	//获取邮箱并校验
 	email := c.PostForm("email")
-	if email == "" {
+	//判断邮箱格式是否正确
+	if email == "" || !utils.CheckEmail(email) {
 		RespFailed(c, CodeInvalidParam)
 		return
 	}
@@ -32,12 +34,12 @@ func PostVerification(c *gin.Context) {
 // Register 注册
 func Register(c *gin.Context) {
 	//获取参数并校验
-	ParamUser := new(model.ParamUser)
+	ParamUser := new(model.ParamRegisterUser)
 	if err := c.ShouldBindJSON(ParamUser); err != nil {
 		RespFailed(c, CodeInvalidParam)
 		return
 	}
-	if ParamUser.Username == "" || ParamUser.Password == "" || ParamUser.RePassword == "" || ParamUser.Email == "" || ParamUser.Password != ParamUser.RePassword {
+	if ParamUser.Username == "" || ParamUser.Password == "" || ParamUser.RePassword == "" || ParamUser.Email == "" || !utils.CheckEmail(ParamUser.Email) || ParamUser.Password != ParamUser.RePassword {
 		RespFailed(c, CodeInvalidParam)
 		return
 	}
@@ -60,4 +62,44 @@ func Register(c *gin.Context) {
 		return
 	}
 	RespSuccess(c, nil)
+}
+
+// Login 登录
+func Login(c *gin.Context) {
+	ParamUser := new(model.ParamLoginUser)
+	if ParamUser.UsernameOrEmail == "" || ParamUser.Password == "" {
+		RespFailed(c, CodeInvalidParam)
+		return
+	}
+	ParamUser.Password = utils.Md5(ParamUser.Password)
+	//判断通过邮箱还是用户名登录
+	var (
+		token string
+		err   error
+	)
+	if utils.CheckEmail(ParamUser.UsernameOrEmail) {
+		token, err = services.LoginByEmail(ParamUser)
+	} else {
+		token, err = services.LoginByUsername(ParamUser)
+	}
+	//判断错误类型
+	if err != nil {
+		if errors.Is(err, mysql.ErrorUserNotExist) {
+			RespFailed(c, CodeUserNotExist)
+			return
+		}
+		if errors.Is(err, mysql.ErrorEmailNotExist) {
+			RespFailed(c, CodeEmailNotExist)
+			return
+		}
+		if errors.Is(err, mysql.ErrorWrongPassword) {
+			RespFailed(c, CodeWrongPassword)
+		}
+		RespFailed(c, CodeServiceBusy)
+		return
+	}
+	//返回token
+	RespSuccess(c, &model.ApiUser{
+		Token: token,
+	})
 }
