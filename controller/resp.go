@@ -20,7 +20,7 @@ func RespSuccess(c *gin.Context, data interface{}) {
 }
 
 func RespFailed(c *gin.Context, code RespCode) {
-	c.JSON(http.StatusInternalServerError, &Resp{
+	c.JSON(http.StatusOK, &Resp{
 		Code: code,
 		Msg:  code.Msg(),
 	})

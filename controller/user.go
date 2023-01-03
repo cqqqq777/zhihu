@@ -1,7 +1,12 @@
 package controller
 
 import (
+	"errors"
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"zhihu/dao/mysql"
+	"zhihu/dao/redisdao"
+	g "zhihu/global"
 	"zhihu/model"
 	"zhihu/services"
 )
@@ -17,6 +22,7 @@ func PostVerification(c *gin.Context) {
 	//给邮箱发验证码
 	if err := services.PostVerification(email); err != nil {
 		RespFailed(c, CodeServiceBusy)
+		g.Logger.Debug(fmt.Sprintf("%v", err))
 		return
 	}
 	//返回响应
@@ -25,6 +31,7 @@ func PostVerification(c *gin.Context) {
 
 // Register 注册
 func Register(c *gin.Context) {
+	//获取参数并校验
 	ParamUser := new(model.ParamUser)
 	if err := c.ShouldBindJSON(ParamUser); err != nil {
 		RespFailed(c, CodeInvalidParam)
@@ -34,5 +41,23 @@ func Register(c *gin.Context) {
 		RespFailed(c, CodeInvalidParam)
 		return
 	}
-
+	//根据错误类型返回响应
+	if err := services.Register(ParamUser); err != nil {
+		if errors.Is(err, mysql.ErrorUserExist) {
+			RespFailed(c, CodeUserExist)
+			return
+		}
+		if errors.Is(err, mysql.ErrorEmailExist) {
+			RespFailed(c, CodeEmailExist)
+			return
+		}
+		if errors.Is(err, redisdao.ErrorInvalidVerification) {
+			RespFailed(c, CodeWrongVerification)
+			return
+		}
+		RespFailed(c, CodeServiceBusy)
+		g.Logger.Debug(fmt.Sprintf("%v", err))
+		return
+	}
+	RespSuccess(c, nil)
 }

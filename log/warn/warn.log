@@ -1,0 +1,2 @@
+2023-01-03T20:22:43.715+0800	WARN	/home/goproject/src/zhihu/controller/user.go:59	nil pointer passed to StructScan destination
+2023-01-03T20:24:59.718+0800	WARN	/home/goproject/src/zhihu/controller/user.go:59	nil pointer passed to StructScan destination

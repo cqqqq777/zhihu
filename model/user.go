@@ -10,7 +10,7 @@ type ParamUser struct {
 	Password   string `json:"password" binding:"required"`
 	RePassword string `json:"re-password" binding:"required"`
 	//验证码
-	Verification int `json:"verification" binding:"required"`
+	Verification int64 `json:"verification" binding:"required"`
 }
 
 type User struct {

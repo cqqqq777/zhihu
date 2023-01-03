@@ -8,13 +8,13 @@ import (
 )
 
 type MyClaims struct {
-	UserID int
+	Uid int
 	jwt.RegisteredClaims
 }
 
 func GenToken(uid int) (string, error) {
 	claim := MyClaims{
-		UserID: uid,
+		Uid: uid,
 		RegisteredClaims: jwt.RegisteredClaims{
 			NotBefore: jwt.NewNumericDate(time.Now().Truncate(time.Second)),
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(g.Config.Auth.Jwt.ExpiresTime) * time.Second)),

@@ -6,7 +6,10 @@ import (
 	"gopkg.in/gomail.v2"
 	"math/rand"
 	"time"
+	"zhihu/dao/mysql"
 	"zhihu/dao/redisdao"
+	"zhihu/model"
+	"zhihu/utils"
 )
 
 // PostVerification 发送验证码
@@ -68,4 +71,31 @@ func PostVerification(email string) error {
 		return err
 	}
 	return nil
+}
+
+func Register(ParamUser *model.ParamUser) error {
+	//检查用户名是否已存在
+	if err := mysql.CheckUsername(ParamUser.Username); err != nil {
+		return err
+	}
+	//检查邮箱是否已注册
+	if err := mysql.CheckEmail(ParamUser.Email); err != nil {
+		return err
+	}
+	//判断验证是否正确
+	verification, err := redisdao.GetVerification(ParamUser.Email)
+	if err != nil || verification != ParamUser.Verification {
+		return redisdao.ErrorInvalidVerification
+	}
+	//获取uid
+	uid, _ := utils.GetID()
+	//添加新用户
+	user := &model.User{
+		UserID:   uid,
+		Username: ParamUser.Username,
+		//将密码加密存到数据库
+		Password: utils.Md5(ParamUser.Password),
+		Email:    ParamUser.Email,
+	}
+	return mysql.AddUser(user)
 }
