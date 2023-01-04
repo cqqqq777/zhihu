@@ -139,5 +139,28 @@ func RevisePassword(c *gin.Context) {
 }
 
 func ReviseUsername(c *gin.Context) {
-
+	ParamUser := new(model.ParamReviseUser)
+	if err := c.ShouldBindJSON(ParamUser); err != nil {
+		RespFailed(c, CodeInvalidParam)
+		return
+	}
+	if ParamUser.NewUsername == "" {
+		RespFailed(c, CodeInvalidParam)
+		return
+	}
+	uid, ok := utils.GetCurrentUser(c)
+	if !ok {
+		RespFailed(c, CodeNeedLogin)
+		return
+	}
+	ParamUser.Uid = uid
+	if err := services.ReviseUsername(ParamUser); err != nil {
+		if errors.Is(err, mysql.ErrorUserExist) {
+			RespFailed(c, CodeUserExist)
+			return
+		}
+		RespFailed(c, CodeServiceBusy)
+		return
+	}
+	RespSuccess(c, nil)
 }

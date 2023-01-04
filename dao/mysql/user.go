@@ -74,3 +74,8 @@ func RevisePassword(password string, uid int) error {
 	_, err := g.Mdb.Exec(RevisePasswordStr, password, uid)
 	return err
 }
+
+func ReviseUsername(username string, uid int) error {
+	_, err := g.Mdb.Exec(ReviseUsernameSte, username, uid)
+	return err
+}

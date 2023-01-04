@@ -158,3 +158,13 @@ func RevisePassword(user *model.ParamReviseUser) error {
 	}
 	return nil
 }
+
+func ReviseUsername(user *model.ParamReviseUser) error {
+	if err := mysql.CheckUsername(user.NewUsername); err != nil {
+		return err
+	}
+	if err := mysql.ReviseUsername(user.NewUsername, user.Uid); err != nil {
+		return err
+	}
+	return nil
+}
