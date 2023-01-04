@@ -92,7 +92,7 @@ func Register(ParamUser *model.ParamRegisterUser) error {
 	uid, _ := utils.GetID()
 	//添加新用户
 	user := &model.User{
-		UserID:   uid,
+		Uid:      uid,
 		Username: ParamUser.Username,
 		//将密码加密存到数据库
 		Password: utils.Md5(ParamUser.Password),
@@ -124,7 +124,7 @@ func LoginByUsername(user *model.ParamLoginUser) (string, error) {
 }
 
 func LoginByEmail(user *model.ParamLoginUser) (string, error) {
-	if err := mysql.CheckUsername(user.UsernameOrEmail); !errors.Is(err, mysql.ErrorEmailExist) {
+	if err := mysql.CheckEmail(user.UsernameOrEmail); !errors.Is(err, mysql.ErrorEmailExist) {
 		if err == nil {
 			return "", mysql.ErrorEmailNotExist
 		}
@@ -143,4 +143,18 @@ func LoginByEmail(user *model.ParamLoginUser) (string, error) {
 	}
 	token, _ := utils.GenToken(uid)
 	return token, nil
+}
+
+func RevisePassword(user *model.ParamReviseUser) error {
+	password, err := mysql.FindPasswordByUid(user.Uid)
+	if err != nil {
+		return err
+	}
+	if user.OriPassword != password {
+		return mysql.ErrorWrongPassword
+	}
+	if err = mysql.RevisePassword(user.NewPassword, user.Uid); err != nil {
+		return err
+	}
+	return nil
 }

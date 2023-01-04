@@ -67,6 +67,10 @@ func Register(c *gin.Context) {
 // Login 登录
 func Login(c *gin.Context) {
 	ParamUser := new(model.ParamLoginUser)
+	if err := c.ShouldBindJSON(ParamUser); err != nil {
+		RespFailed(c, CodeInvalidParam)
+		return
+	}
 	if ParamUser.UsernameOrEmail == "" || ParamUser.Password == "" {
 		RespFailed(c, CodeInvalidParam)
 		return
@@ -94,6 +98,7 @@ func Login(c *gin.Context) {
 		}
 		if errors.Is(err, mysql.ErrorWrongPassword) {
 			RespFailed(c, CodeWrongPassword)
+			return
 		}
 		RespFailed(c, CodeServiceBusy)
 		return
@@ -102,4 +107,37 @@ func Login(c *gin.Context) {
 	RespSuccess(c, &model.ApiUser{
 		Token: token,
 	})
+}
+
+func RevisePassword(c *gin.Context) {
+	ParamUser := new(model.ParamReviseUser)
+	if err := c.ShouldBindJSON(ParamUser); err != nil {
+		RespFailed(c, CodeInvalidParam)
+		return
+	}
+	if ParamUser.OriPassword == "" || ParamUser.NewPassword == "" || ParamUser.RePassword == "" || ParamUser.NewPassword != ParamUser.RePassword {
+		RespFailed(c, CodeInvalidParam)
+		return
+	}
+	uid, ok := utils.GetCurrentUser(c)
+	if !ok {
+		RespFailed(c, CodeNeedLogin)
+		return
+	}
+	ParamUser.Uid = uid
+	ParamUser.NewPassword = utils.Md5(ParamUser.NewPassword)
+	ParamUser.OriPassword = utils.Md5(ParamUser.OriPassword)
+	if err := services.RevisePassword(ParamUser); err != nil {
+		if errors.Is(err, mysql.ErrorWrongPassword) {
+			RespFailed(c, CodeWrongPassword)
+			return
+		}
+		RespFailed(c, CodeServiceBusy)
+		return
+	}
+	RespSuccess(c, nil)
+}
+
+func ReviseUsername(c *gin.Context) {
+
 }

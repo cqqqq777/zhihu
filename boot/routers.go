@@ -18,6 +18,12 @@ func InitRouters() {
 		public.POST("/verification", controller.PostVerification)
 		public.POST("/login", controller.Login)
 	}
+	private := v1.Group("")
+	private.Use(middleware.JWTAuth)
+	{
+		private.PUT("/password", controller.RevisePassword)
+		private.PUT("/username", controller.ReviseUsername)
+	}
 	if err := r.Run(); err != nil {
 		panic(err)
 	}

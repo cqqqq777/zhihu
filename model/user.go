@@ -1,6 +1,8 @@
 package model
 
-import "time"
+import (
+	"time"
+)
 
 const CtxGetUID = "UserID"
 
@@ -18,8 +20,16 @@ type ParamLoginUser struct {
 	Password        string `json:"password" binding:"required"`
 }
 
+type ParamReviseUser struct {
+	Uid         int
+	NewUsername string `json:"new-username"`
+	OriPassword string `json:"ori-password"`
+	NewPassword string `json:"new-password"`
+	RePassword  string `json:"re-password"`
+}
+
 type User struct {
-	UserID   int       `db:"uid"`
+	Uid      int       `db:"uid"`
 	Username string    `db:"username"`
 	Password string    `db:"password"`
 	Email    string    `db:"email"`
