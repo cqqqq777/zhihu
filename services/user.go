@@ -168,3 +168,21 @@ func ReviseUsername(user *model.ParamReviseUser) error {
 	}
 	return nil
 }
+
+func ForgetPassword(user *model.ParamRegisterUser) error {
+	if mysql.CheckEmail(user.Email) == nil {
+		return mysql.ErrorEmailNotExist
+	}
+	verification, err := redisdao.GetVerification(user.Email)
+	if err != nil || verification != user.Verification {
+		return redisdao.ErrorInvalidVerification
+	}
+	uid, err := mysql.FindUid(user.Email)
+	if err != nil {
+		return err
+	}
+	if err = mysql.RevisePassword(user.Password, uid); err != nil {
+		return err
+	}
+	return nil
+}

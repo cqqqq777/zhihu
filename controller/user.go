@@ -109,6 +109,7 @@ func Login(c *gin.Context) {
 	})
 }
 
+// RevisePassword 修改密码
 func RevisePassword(c *gin.Context) {
 	ParamUser := new(model.ParamReviseUser)
 	if err := c.ShouldBindJSON(ParamUser); err != nil {
@@ -138,6 +139,7 @@ func RevisePassword(c *gin.Context) {
 	RespSuccess(c, nil)
 }
 
+// ReviseUsername 修改用户名
 func ReviseUsername(c *gin.Context) {
 	ParamUser := new(model.ParamReviseUser)
 	if err := c.ShouldBindJSON(ParamUser); err != nil {
@@ -157,6 +159,32 @@ func ReviseUsername(c *gin.Context) {
 	if err := services.ReviseUsername(ParamUser); err != nil {
 		if errors.Is(err, mysql.ErrorUserExist) {
 			RespFailed(c, CodeUserExist)
+			return
+		}
+		RespFailed(c, CodeServiceBusy)
+		return
+	}
+	RespSuccess(c, nil)
+}
+
+// ForgetPassword 忘记密码
+func ForgetPassword(c *gin.Context) {
+	ParamUser := new(model.ParamRegisterUser)
+	if err := c.ShouldBindJSON(ParamUser); err != nil {
+		RespFailed(c, CodeInvalidParam)
+		return
+	}
+	if ParamUser.Email == "" || ParamUser.Password == "" || ParamUser.RePassword == "" || ParamUser.Verification == 0 || ParamUser.Password != ParamUser.RePassword {
+		RespFailed(c, CodeInvalidParam)
+		return
+	}
+	if err := services.ForgetPassword(ParamUser); err != nil {
+		if errors.Is(err, mysql.ErrorEmailNotExist) {
+			RespFailed(c, CodeEmailNotExist)
+			return
+		}
+		if errors.Is(err, redisdao.ErrorInvalidVerification) {
+			RespFailed(c, CodeWrongVerification)
 			return
 		}
 		RespFailed(c, CodeServiceBusy)
