@@ -1,2 +1,5 @@
 2023-01-03T20:22:43.715+0800	WARN	/home/goproject/src/zhihu/controller/user.go:59	nil pointer passed to StructScan destination
 2023-01-03T20:24:59.718+0800	WARN	/home/goproject/src/zhihu/controller/user.go:59	nil pointer passed to StructScan destination
+2023-01-05T23:37:51.927+0800	WARN	/home/goproject/src/zhihu/controller/topic.go:37	scannable dest type ptr with >1 columns (5) in result
+2023-01-05T23:39:14.079+0800	WARN	/home/goproject/src/zhihu/controller/topic.go:37	scannable dest type ptr with >1 columns (4) in result
+2023-01-05T23:39:43.089+0800	WARN	/home/goproject/src/zhihu/controller/topic.go:37	nil pointer passed to StructScan destination
