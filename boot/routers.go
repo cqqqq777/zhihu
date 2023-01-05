@@ -18,6 +18,7 @@ func InitRouters() {
 		public.POST("/verification", controller.PostVerification)
 		public.POST("/login", controller.Login)
 		public.PUT("/password/forget", controller.ForgetPassword)
+		public.GET("/topics", controller.GetAllTopic)
 	}
 	private := v1.Group("")
 	private.Use(middleware.JWTAuth)

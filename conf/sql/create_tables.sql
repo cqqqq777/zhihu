@@ -31,7 +31,7 @@ create table questions(
                           author_name varchar(50) comment '发布者用户名',
                           topic_id int not null comment '所属话题的id',
                           topic_name varchar(128) not null comment '所属话题名称',
-                          like_count bigint default 0 comment '点赞数',
+                          like_count bigint default 0 not null comment '点赞数',
                           create_time timestamp null default current_timestamp,
                           update_time timestamp null default current_timestamp on update current_timestamp,
                           primary key (qid),
@@ -45,11 +45,13 @@ create table posts(
                       content varchar(8192) not null comment '帖子内容',
                       author_id bigint not null comment '作者id',
                       author_name varchar(50) comment '作者用户名',
-                      like_count bigint comment '点赞数',
+                      topic_id int not null comment '所属话题id',
+                      topic_name varchar(128) not null comment '所属话题名称',
+                      like_count bigint default 0 not null comment '点赞数',
                       create_time timestamp null default current_timestamp,
                       update_time timestamp null default current_timestamp on update current_timestamp,
                       primary key (pid),
-
+                    key `idx_topic_id` (topic_id) using btree ,
                       key `idx_author_id` (author_id) using btree
 )collate = utf8mb4_general_ci;
 

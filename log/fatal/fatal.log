@@ -4,3 +4,5 @@
 2023-01-03T19:06:10.314+0800	FATAL	/home/goproject/src/zhihu/boot/database.go:42	connect redis failed err:dial tcp 127.0.0.1:6379: connect: connection refused
 2023-01-03T19:06:16.481+0800	FATAL	/home/goproject/src/zhihu/boot/database.go:42	connect redis failed err:dial tcp 127.0.0.1:6379: connect: connection refused
 2023-01-03T19:08:43.146+0800	FATAL	/home/goproject/src/zhihu/boot/database.go:42	connect redis failed err:dial tcp 127.0.0.1:6379: connect: connection refused
+2023-01-05T23:02:21.777+0800	FATAL	/home/goproject/src/zhihu/boot/database.go:42	connect redis failed err:dial tcp 127.0.0.1:6379: connect: connection refused
+2023-01-05T23:02:24.933+0800	FATAL	/home/goproject/src/zhihu/boot/database.go:42	connect redis failed err:dial tcp 127.0.0.1:6379: connect: connection refused
