@@ -25,7 +25,7 @@ insert into topics (tid, topic_name, introduction) VALUES (4,'lol','英雄联盟
 
 create table posts(
                       pid bigint not null comment '帖子id',
-                      type smallint not null comment '帖子类别,0为问题，1为文章',
+                      type smallint not null comment '帖子类别,1为问题，2为文章',
                       title varchar(128) not null comment '帖子标题',
                       content varchar(8192) not null comment '帖子内容',
                       author_id bigint not null comment '作者id',
@@ -45,6 +45,7 @@ create table comments(
                          parent_id bigint not null default 0 comment '父级评论id,若为最高级评论则为0',
                          root_id bigint not null default 0 comment '根级评论id，若为最高级评论则为0',
                          commented_uid bigint not null default 0 comment '被回复的人的id',
+                         create_time timestamp null default current_timestamp,
                          primary key (cid),
                          key `idx_author_id` (author_id) using btree ,
                          key `idx_post_id` (post_id) using btree ,

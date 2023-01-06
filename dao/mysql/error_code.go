@@ -9,4 +9,5 @@ var (
 	ErrorEmailNotExist = errors.New("邮箱未注册")
 	ErrorWrongPassword = errors.New("密码错误")
 	ErrorInvalidId     = errors.New("无效的id")
+	ErrorQuestionExist = errors.New("问题已存在")
 )

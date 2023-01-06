@@ -26,6 +26,7 @@ func InitRouters() {
 	{
 		private.PUT("/password", controller.RevisePassword)
 		private.PUT("/username", controller.ReviseUsername)
+		private.POST("/post", controller.CreatePost)
 	}
 	if err := r.Run(); err != nil {
 		panic(err)

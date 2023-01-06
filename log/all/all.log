@@ -209,3 +209,29 @@
 2023-01-06T15:31:01.892+0800	INFO	/home/goproject/src/zhihu/middleware/zap.go:26	/api/v1/topics/3	{"status": 200, "method": "GET", "path": "/api/v1/topics/3", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.30.0", "errors": "", "cost": 493768}
 2023-01-06T15:31:02.291+0800	INFO	/home/goproject/src/zhihu/middleware/zap.go:26	/api/v1/topics/3	{"status": 200, "method": "GET", "path": "/api/v1/topics/3", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.30.0", "errors": "", "cost": 485376}
 2023-01-06T15:31:02.885+0800	INFO	/home/goproject/src/zhihu/middleware/zap.go:26	/api/v1/topics/3	{"status": 200, "method": "GET", "path": "/api/v1/topics/3", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.30.0", "errors": "", "cost": 550282}
+2023-01-06T23:10:28.863+0800	INFO	/home/goproject/src/zhihu/boot/logger.go:34	init logger successfully
+2023-01-06T23:10:28.886+0800	INFO	/home/goproject/src/zhihu/boot/database.go:31	connect mysql successfully
+2023-01-06T23:10:28.893+0800	INFO	/home/goproject/src/zhihu/boot/database.go:45	connect redis successfully
+2023-01-06T23:10:31.795+0800	INFO	/home/goproject/src/zhihu/middleware/zap.go:26	/api/v1/post	{"status": 200, "method": "POST", "path": "/api/v1/post", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.30.0", "errors": "", "cost": 2153809}
+2023-01-06T23:10:41.597+0800	INFO	/home/goproject/src/zhihu/middleware/zap.go:26	/api/v1/post	{"status": 200, "method": "POST", "path": "/api/v1/post", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.30.0", "errors": "", "cost": 87160}
+2023-01-06T23:12:18.395+0800	INFO	/home/goproject/src/zhihu/boot/logger.go:34	init logger successfully
+2023-01-06T23:12:18.401+0800	INFO	/home/goproject/src/zhihu/boot/database.go:31	connect mysql successfully
+2023-01-06T23:12:18.402+0800	INFO	/home/goproject/src/zhihu/boot/database.go:45	connect redis successfully
+2023-01-06T23:12:28.283+0800	INFO	/home/goproject/src/zhihu/middleware/zap.go:26	/api/v1/post	{"status": 200, "method": "POST", "path": "/api/v1/post", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.30.0", "errors": "", "cost": 2250171}
+2023-01-06T23:13:02.001+0800	INFO	/home/goproject/src/zhihu/boot/logger.go:34	init logger successfully
+2023-01-06T23:13:02.009+0800	INFO	/home/goproject/src/zhihu/boot/database.go:31	connect mysql successfully
+2023-01-06T23:13:02.011+0800	INFO	/home/goproject/src/zhihu/boot/database.go:45	connect redis successfully
+2023-01-06T23:13:03.421+0800	INFO	/home/goproject/src/zhihu/middleware/zap.go:26	/api/v1/post	{"status": 200, "method": "POST", "path": "/api/v1/post", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.30.0", "errors": "", "cost": 1907376}
+2023-01-06T23:16:08.612+0800	INFO	/home/goproject/src/zhihu/boot/logger.go:34	init logger successfully
+2023-01-06T23:16:08.620+0800	INFO	/home/goproject/src/zhihu/boot/database.go:31	connect mysql successfully
+2023-01-06T23:16:08.622+0800	INFO	/home/goproject/src/zhihu/boot/database.go:45	connect redis successfully
+2023-01-06T23:16:10.207+0800	INFO	/home/goproject/src/zhihu/middleware/zap.go:26	/api/v1/post	{"status": 200, "method": "POST", "path": "/api/v1/post", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.30.0", "errors": "", "cost": 2682110}
+2023-01-06T23:16:48.379+0800	INFO	/home/goproject/src/zhihu/middleware/zap.go:26	/api/v1/post	{"status": 200, "method": "POST", "path": "/api/v1/post", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.30.0", "errors": "", "cost": 267682}
+2023-01-06T23:18:42.615+0800	INFO	/home/goproject/src/zhihu/boot/logger.go:34	init logger successfully
+2023-01-06T23:18:42.621+0800	INFO	/home/goproject/src/zhihu/boot/database.go:31	connect mysql successfully
+2023-01-06T23:18:42.622+0800	INFO	/home/goproject/src/zhihu/boot/database.go:45	connect redis successfully
+2023-01-06T23:18:45.027+0800	INFO	/home/goproject/src/zhihu/middleware/zap.go:26	/api/v1/post	{"status": 200, "method": "POST", "path": "/api/v1/post", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.30.0", "errors": "", "cost": 56929825}
+2023-01-06T23:55:33.844+0800	INFO	/home/goproject/src/zhihu/boot/logger.go:34	init logger successfully
+2023-01-06T23:55:33.851+0800	INFO	/home/goproject/src/zhihu/boot/database.go:31	connect mysql successfully
+2023-01-06T23:55:33.853+0800	INFO	/home/goproject/src/zhihu/boot/database.go:45	connect redis successfully
+2023-01-06T23:55:36.679+0800	INFO	/home/goproject/src/zhihu/middleware/zap.go:26	/api/v1/post	{"status": 200, "method": "POST", "path": "/api/v1/post", "query": "", "ip": "::1", "user-agent": "PostmanRuntime/7.30.0", "errors": "", "cost": 4639117}
