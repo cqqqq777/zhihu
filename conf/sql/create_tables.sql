@@ -23,21 +23,9 @@ insert into topics (tid, topic_name, introduction) values (2,'leetcode','算法'
 insert into topics(tid, topic_name, introduction) VALUES (3,'csgo','csgo');
 insert into topics (tid, topic_name, introduction) VALUES (4,'lol','英雄联盟');
 
-
-create table questions(
-                          qid bigint not null comment '问题id',
-                          content varchar(8192) not null comment '内容',
-                          author_id bigint not null comment '发布者的id',
-                          topic_id int not null comment '所属话题的id',
-                          create_time timestamp null default current_timestamp,
-                          update_time timestamp null default current_timestamp on update current_timestamp,
-                          primary key (qid),
-                          key `idx_author_id` (author_id) using btree ,
-                          key `idx_topic_id` (topic_id) using btree
-)collate = utf8mb4_general_ci;
-
 create table posts(
                       pid bigint not null comment '帖子id',
+                      type smallint not null comment '帖子类别,0为问题，1为文章',
                       title varchar(128) not null comment '帖子标题',
                       content varchar(8192) not null comment '帖子内容',
                       author_id bigint not null comment '作者id',
@@ -46,20 +34,19 @@ create table posts(
                       update_time timestamp null default current_timestamp on update current_timestamp,
                       primary key (pid),
                     key `idx_topic_id` (topic_id) using btree ,
-                      key `idx_author_id` (author_id) using btree
+                      key `idx_author_id` (author_id) using btree,
+                      key `idx_type_id` (type) using btree
 )collate = utf8mb4_general_ci;
 
 create table comments(
                          cid bigint not null comment '评论id',
                          author_id bigint not null comment '评论人id',
                          post_id bigint comment '评论的帖子id',
-                         question_id bigint comment '评论的问题id',
                          parent_id bigint not null default 0 comment '父级评论id,若为最高级评论则为0',
                          root_id bigint not null default 0 comment '根级评论id，若为最高级评论则为0',
                          commented_uid bigint not null default 0 comment '被回复的人的id',
                          primary key (cid),
                          key `idx_author_id` (author_id) using btree ,
                          key `idx_post_id` (post_id) using btree ,
-                         key `idx_question_id` (question_id) using btree ,
                          key `idx_commented_uid` (commented_uid) using btree
 )engine =InnoDB character set =utf8mb4 collate =utf8mb4_general_ci;
