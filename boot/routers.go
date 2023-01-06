@@ -20,6 +20,7 @@ func InitRouters() {
 		public.PUT("/password/forget", controller.ForgetPassword)
 		public.GET("/topics", controller.GetAllTopic)
 		public.GET("/topics/:tid", controller.TopicDetail)
+		public.GET("/post/:pid", controller.PostDetail)
 	}
 	private := v1.Group("")
 	private.Use(middleware.JWTAuth)

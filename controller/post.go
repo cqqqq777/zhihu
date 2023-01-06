@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"strconv"
 	"zhihu/dao/mysql"
 	g "zhihu/global"
 	"zhihu/model"
@@ -37,4 +38,25 @@ func CreatePost(c *gin.Context) {
 		return
 	}
 	RespSuccess(c, nil)
+}
+
+// PostDetail 获取帖子详情
+func PostDetail(c *gin.Context) {
+	pidStr := c.Param("pid")
+	pid, err := strconv.ParseInt(pidStr, 10, 64)
+	if err != nil {
+		RespFailed(c, CodeInvalidParam)
+		return
+	}
+	data, err := services.PostDetail(pid)
+	if err != nil {
+		if err == mysql.ErrorInvalidId {
+			RespFailed(c, CodeInvalidId)
+			return
+		}
+		RespFailed(c, CodeServiceBusy)
+		g.Logger.Warn(fmt.Sprintf("%v", err))
+		return
+	}
+	RespSuccess(c, data)
 }

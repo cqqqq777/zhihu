@@ -3,3 +3,11 @@
 2023-01-05T23:37:51.927+0800	WARN	/home/goproject/src/zhihu/controller/topic.go:37	scannable dest type ptr with >1 columns (5) in result
 2023-01-05T23:39:14.079+0800	WARN	/home/goproject/src/zhihu/controller/topic.go:37	scannable dest type ptr with >1 columns (4) in result
 2023-01-05T23:39:43.089+0800	WARN	/home/goproject/src/zhihu/controller/topic.go:37	nil pointer passed to StructScan destination
+2023-01-07T00:30:20.443+0800	WARN	/home/goproject/src/zhihu/controller/post.go:58	missing destination name pid in *model.PostDetail
+2023-01-07T00:32:29.235+0800	WARN	/home/goproject/src/zhihu/controller/post.go:58	missing destination name pid in *model.PostDetail
+2023-01-07T00:52:07.690+0800	WARN	/home/goproject/src/zhihu/controller/post.go:58	json: Unmarshal(nil *model.PostDetail)
+2023-01-07T00:52:08.226+0800	WARN	/home/goproject/src/zhihu/controller/post.go:58	json: Unmarshal(nil *model.PostDetail)
+2023-01-07T00:52:08.847+0800	WARN	/home/goproject/src/zhihu/controller/post.go:58	json: Unmarshal(nil *model.PostDetail)
+2023-01-07T00:52:09.429+0800	WARN	/home/goproject/src/zhihu/controller/post.go:58	json: Unmarshal(nil *model.PostDetail)
+2023-01-07T00:52:09.881+0800	WARN	/home/goproject/src/zhihu/controller/post.go:58	json: Unmarshal(nil *model.PostDetail)
+2023-01-07T00:52:10.206+0800	WARN	/home/goproject/src/zhihu/controller/post.go:58	json: Unmarshal(nil *model.PostDetail)
