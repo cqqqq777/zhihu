@@ -7,10 +7,10 @@ import (
 )
 
 func PostDetail(pid int64) (string, error) {
-	cmd := g.Rdb.Get(context.Background(), GetTopicDetailKey(pid))
+	cmd := g.Rdb.Get(context.Background(), GetPostDetailKey(pid))
 	return cmd.Val(), cmd.Err()
 }
 
 func SetPostDetail(pid int64, value interface{}) {
-	g.Rdb.SetEx(context.Background(), GetTopicDetailKey(pid), value, time.Minute*5)
+	g.Rdb.SetEx(context.Background(), GetPostDetailKey(pid), value, time.Minute*5)
 }

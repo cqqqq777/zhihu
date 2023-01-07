@@ -45,7 +45,7 @@ func PostDetail(pid int64) (data *model.PostDetail, err error) {
 		}
 		data.TopicDetail = topic
 		value, _ := json.Marshal(data)
-		redisdao.SetTopicDetail(int64(data.Pid), value)
+		redisdao.SetPostDetail(int64(data.Pid), value)
 		return data, nil
 	}
 	if err = json.Unmarshal([]byte(dataStr), &data); err != nil {
