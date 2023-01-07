@@ -101,3 +101,51 @@ func EssayList(page, size int64) (data []*model.PostDetail, err error) {
 	}
 	return
 }
+
+func UserQuestionList(page, size, uid int64) (data []*model.PostDetail, err error) {
+	posts, err := mysql.UserQuestionList(page, size, uid)
+	if err != nil {
+		return nil, err
+	}
+	data = make([]*model.PostDetail, 0, len(posts))
+	for _, post := range posts {
+		username, err := mysql.FindUsernameByUid(post.AuthorID)
+		if err != nil {
+			g.Logger.Warn(fmt.Sprintf("%v", err))
+			continue
+		}
+		topic, err := mysql.TopicDetails(int64(post.TopicID))
+		if err != nil {
+			g.Logger.Warn(fmt.Sprintf("%v", err))
+			continue
+		}
+		post.AuthorName = username
+		post.TopicDetail = topic
+		data = append(data, post)
+	}
+	return
+}
+
+func UserEssayList(page, size, uid int64) (data []*model.PostDetail, err error) {
+	posts, err := mysql.UserEssayList(page, size, uid)
+	if err != nil {
+		return nil, err
+	}
+	data = make([]*model.PostDetail, 0, len(posts))
+	for _, post := range posts {
+		username, err := mysql.FindUsernameByUid(post.AuthorID)
+		if err != nil {
+			g.Logger.Warn(fmt.Sprintf("%v", err))
+			continue
+		}
+		topic, err := mysql.TopicDetails(int64(post.TopicID))
+		if err != nil {
+			g.Logger.Warn(fmt.Sprintf("%v", err))
+			continue
+		}
+		post.AuthorName = username
+		post.TopicDetail = topic
+		data = append(data, post)
+	}
+	return
+}

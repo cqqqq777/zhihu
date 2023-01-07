@@ -88,3 +88,37 @@ func EssayList(c *gin.Context) {
 	}
 	RespSuccess(c, data)
 }
+
+// UserQuestionList 获取用户提出的所有问题
+func UserQuestionList(c *gin.Context) {
+	uid, ok := utils.GetCurrentUser(c)
+	if !ok {
+		RespFailed(c, CodeNeedLogin)
+		return
+	}
+	page, size := utils.GetPageInfo(c)
+	data, err := services.UserQuestionList(page, size, int64(uid))
+	if err != nil {
+		RespFailed(c, CodeServiceBusy)
+		g.Logger.Error(fmt.Sprintf("%v", err))
+		return
+	}
+	RespSuccess(c, data)
+}
+
+// UserEssayList 获取用户发表的所有文章
+func UserEssayList(c *gin.Context) {
+	uid, ok := utils.GetCurrentUser(c)
+	if !ok {
+		RespFailed(c, CodeNeedLogin)
+		return
+	}
+	page, size := utils.GetPageInfo(c)
+	data, err := services.UserEssayList(page, size, int64(uid))
+	if err != nil {
+		RespFailed(c, CodeServiceBusy)
+		g.Logger.Error(fmt.Sprintf("%v", err))
+		return
+	}
+	RespSuccess(c, data)
+}
