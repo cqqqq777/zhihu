@@ -2,9 +2,11 @@ package services
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/go-redis/redis/v9"
 	"zhihu/dao/mysql"
 	"zhihu/dao/redisdao"
+	g "zhihu/global"
 	"zhihu/model"
 	"zhihu/utils"
 )
@@ -25,6 +27,7 @@ func CreatePost(post *model.Post) error {
 }
 
 func PostDetail(pid int64) (data *model.PostDetail, err error) {
+	//先从redis中获取数据，如果获取不到再到MySQL中获取数据，并在redis中设置缓存
 	dataStr, err1 := redisdao.PostDetail(pid)
 	if err1 == redis.Nil {
 		data, err = mysql.PostDetail(pid)
@@ -47,6 +50,54 @@ func PostDetail(pid int64) (data *model.PostDetail, err error) {
 	}
 	if err = json.Unmarshal([]byte(dataStr), &data); err != nil {
 		return nil, err
+	}
+	return
+}
+
+func QuestionList(page, size int64) (data []*model.PostDetail, err error) {
+	posts, err := mysql.QuestionList(page, size)
+	if err != nil {
+		return nil, err
+	}
+	data = make([]*model.PostDetail, 0, len(posts))
+	for _, post := range posts {
+		username, err := mysql.FindUsernameByUid(post.AuthorID)
+		if err != nil {
+			g.Logger.Warn(fmt.Sprintf("%v", err))
+			continue
+		}
+		topic, err := mysql.TopicDetails(int64(post.TopicID))
+		if err != nil {
+			g.Logger.Warn(fmt.Sprintf("%v", err))
+			continue
+		}
+		post.AuthorName = username
+		post.TopicDetail = topic
+		data = append(data, post)
+	}
+	return
+}
+
+func EssayList(page, size int64) (data []*model.PostDetail, err error) {
+	posts, err := mysql.EssayList(page, size)
+	if err != nil {
+		return nil, err
+	}
+	data = make([]*model.PostDetail, 0, len(posts))
+	for _, post := range posts {
+		username, err := mysql.FindUsernameByUid(post.AuthorID)
+		if err != nil {
+			g.Logger.Warn(fmt.Sprintf("%v", err))
+			continue
+		}
+		topic, err := mysql.TopicDetails(int64(post.TopicID))
+		if err != nil {
+			g.Logger.Warn(fmt.Sprintf("%v", err))
+			continue
+		}
+		post.AuthorName = username
+		post.TopicDetail = topic
+		data = append(data, post)
 	}
 	return
 }

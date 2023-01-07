@@ -21,6 +21,8 @@ func InitRouters() {
 		public.GET("/topics", controller.GetAllTopic)
 		public.GET("/topics/:tid", controller.TopicDetail)
 		public.GET("/post/:pid", controller.PostDetail)
+		public.GET("/questions", controller.QuestionList)
+		public.GET("/essays", controller.EssayList)
 	}
 	private := v1.Group("")
 	private.Use(middleware.JWTAuth)
@@ -28,6 +30,8 @@ func InitRouters() {
 		private.PUT("/password", controller.RevisePassword)
 		private.PUT("/username", controller.ReviseUsername)
 		private.POST("/post", controller.CreatePost)
+		private.GET("/user/questions")
+		private.GET("/user/essays")
 	}
 	if err := r.Run(); err != nil {
 		panic(err)
