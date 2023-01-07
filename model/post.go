@@ -19,3 +19,8 @@ type PostDetail struct {
 	*Post
 	*TopicDetail `json:"topic"`
 }
+
+type ApiPostList struct {
+	TotalNum int           `json:"total_num"`
+	Posts    []*PostDetail `json:"posts"`
+}

@@ -54,12 +54,13 @@ func PostDetail(pid int64) (data *model.PostDetail, err error) {
 	return
 }
 
-func QuestionList(page, size int64) (data []*model.PostDetail, err error) {
+func QuestionList(page, size int64) (data *model.ApiPostList, err error) {
 	posts, err := mysql.QuestionList(page, size)
 	if err != nil {
 		return nil, err
 	}
-	data = make([]*model.PostDetail, 0, len(posts))
+	data = new(model.ApiPostList)
+	data.Posts = make([]*model.PostDetail, 0, len(posts))
 	for _, post := range posts {
 		username, err := mysql.FindUsernameByUid(post.AuthorID)
 		if err != nil {
@@ -73,17 +74,25 @@ func QuestionList(page, size int64) (data []*model.PostDetail, err error) {
 		}
 		post.AuthorName = username
 		post.TopicDetail = topic
-		data = append(data, post)
+		data.Posts = append(data.Posts, post)
 	}
-	return
-}
-
-func EssayList(page, size int64) (data []*model.PostDetail, err error) {
-	posts, err := mysql.EssayList(page, size)
+	var num int
+	num, err = mysql.GetQuestionTotalNum()
 	if err != nil {
 		return nil, err
 	}
-	data = make([]*model.PostDetail, 0, len(posts))
+	data.TotalNum = num
+	return
+}
+
+func EssayList(page, size int64) (data *model.ApiPostList, err error) {
+	posts, err := mysql.EssayList(page, size)
+	if err != nil {
+		g.Logger.Warn(fmt.Sprintf("%v", err))
+		return nil, err
+	}
+	data = new(model.ApiPostList)
+	data.Posts = make([]*model.PostDetail, 0, len(posts))
 	for _, post := range posts {
 		username, err := mysql.FindUsernameByUid(post.AuthorID)
 		if err != nil {
@@ -97,17 +106,24 @@ func EssayList(page, size int64) (data []*model.PostDetail, err error) {
 		}
 		post.AuthorName = username
 		post.TopicDetail = topic
-		data = append(data, post)
+		data.Posts = append(data.Posts, post)
 	}
+	var num int
+	num, err = mysql.GetEssayTotalNum()
+	if err != nil {
+		return nil, err
+	}
+	data.TotalNum = num
 	return
 }
 
-func UserQuestionList(page, size, uid int64) (data []*model.PostDetail, err error) {
+func UserQuestionList(page, size, uid int64) (data *model.ApiPostList, err error) {
 	posts, err := mysql.UserQuestionList(page, size, uid)
 	if err != nil {
 		return nil, err
 	}
-	data = make([]*model.PostDetail, 0, len(posts))
+	data = new(model.ApiPostList)
+	data.Posts = make([]*model.PostDetail, 0, len(posts))
 	for _, post := range posts {
 		username, err := mysql.FindUsernameByUid(post.AuthorID)
 		if err != nil {
@@ -121,17 +137,24 @@ func UserQuestionList(page, size, uid int64) (data []*model.PostDetail, err erro
 		}
 		post.AuthorName = username
 		post.TopicDetail = topic
-		data = append(data, post)
+		data.Posts = append(data.Posts, post)
 	}
+	var num int
+	num, err = mysql.GetUserQuestionTotalNum(uid)
+	if err != nil {
+		return nil, err
+	}
+	data.TotalNum = num
 	return
 }
 
-func UserEssayList(page, size, uid int64) (data []*model.PostDetail, err error) {
+func UserEssayList(page, size, uid int64) (data *model.ApiPostList, err error) {
 	posts, err := mysql.UserEssayList(page, size, uid)
 	if err != nil {
 		return nil, err
 	}
-	data = make([]*model.PostDetail, 0, len(posts))
+	data = new(model.ApiPostList)
+	data.Posts = make([]*model.PostDetail, 0, len(posts))
 	for _, post := range posts {
 		username, err := mysql.FindUsernameByUid(post.AuthorID)
 		if err != nil {
@@ -145,7 +168,13 @@ func UserEssayList(page, size, uid int64) (data []*model.PostDetail, err error) 
 		}
 		post.AuthorName = username
 		post.TopicDetail = topic
-		data = append(data, post)
+		data.Posts = append(data.Posts, post)
 	}
+	var num int
+	num, err = mysql.GetUserEssayTotalNum(uid)
+	if err != nil {
+		return nil, err
+	}
+	data.TotalNum = num
 	return
 }
