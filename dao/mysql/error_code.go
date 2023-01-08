@@ -10,4 +10,5 @@ var (
 	ErrorWrongPassword = errors.New("密码错误")
 	ErrorInvalidId     = errors.New("无效的id")
 	ErrorQuestionExist = errors.New("问题已存在")
+	ErrorNoPermission  = errors.New("无权限")
 )

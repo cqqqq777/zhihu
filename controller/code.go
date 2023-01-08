@@ -16,6 +16,7 @@ const (
 	CodeInvalidToken
 	CodeInvalidId
 	CodeQuestionExist
+	CodeNoPermission
 )
 
 var codeMsgMap = map[RespCode]string{
@@ -32,6 +33,7 @@ var codeMsgMap = map[RespCode]string{
 	CodeInvalidToken:      "无效的token",
 	CodeInvalidId:         "无效的id",
 	CodeQuestionExist:     "问题已存在",
+	CodeNoPermission:      "无权限",
 }
 
 func (code RespCode) Msg() string {

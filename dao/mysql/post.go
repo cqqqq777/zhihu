@@ -18,6 +18,9 @@ const (
 	GetEssayTotalNumStr        = "select count(pid) from posts where type = 2"
 	GetUserQuestionTotalNumStr = "select count(pid) from posts where type = 1 and author_id = ?"
 	GetUserEssayTotalNumStr    = "select count(pid) from posts where type = 2 and author_id = ?"
+	GetAuthorIdByPidStr        = "select author_id from posts where pid = ?"
+	UpdatePostStr              = "update posts set type = ?,topic_id = ?,title = ?,content =? where pid =? "
+	DeletePostStr              = "delete from posts where pid = ?"
 )
 
 func CheckQuestion(title string) error {
@@ -86,4 +89,19 @@ func UserEssayList(page, size, uid int64) (posts []*model.PostDetail, err error)
 func GetUserEssayTotalNum(uid int64) (num int, err error) {
 	err = g.Mdb.Get(&num, GetUserEssayTotalNumStr, uid)
 	return
+}
+
+func GetAuthorIdByPid(pid int) (uid int, err error) {
+	err = g.Mdb.Get(&uid, GetAuthorIdByPidStr, pid)
+	return
+}
+
+func UpdatePost(p *model.Post) error {
+	_, err := g.Mdb.Exec(UpdatePostStr, p.Type, p.TopicID, p.Title, p.Content, p.Pid)
+	return err
+}
+
+func DeletePost(pid int) error {
+	_, err := g.Mdb.Exec(DeletePostStr, pid)
+	return err
 }

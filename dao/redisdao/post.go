@@ -14,3 +14,7 @@ func PostDetail(pid int64) (string, error) {
 func SetPostDetail(pid int64, value interface{}) {
 	g.Rdb.SetEx(context.Background(), GetPostDetailKey(pid), value, time.Minute*5)
 }
+
+func ClearPostCache(pid int64) {
+	g.Rdb.Del(context.Background(), GetPostDetailKey(pid))
+}

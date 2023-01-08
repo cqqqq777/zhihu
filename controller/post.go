@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"strconv"
@@ -121,4 +122,68 @@ func UserEssayList(c *gin.Context) {
 		return
 	}
 	RespSuccess(c, data)
+}
+
+// UpdatePost 更新一篇帖子
+func UpdatePost(c *gin.Context) {
+	uid, ok := utils.GetCurrentUser(c)
+	if !ok {
+		RespFailed(c, CodeNeedLogin)
+		return
+	}
+	pidStr := c.Param("pid")
+	pid, err := strconv.ParseInt(pidStr, 10, 64)
+	if err != nil {
+		RespFailed(c, CodeInvalidParam)
+		return
+	}
+	post := new(model.Post)
+	post.AuthorID = uid
+	post.Pid = int(pid)
+	err = c.ShouldBindJSON(post)
+	if err != nil {
+		RespFailed(c, CodeInvalidParam)
+		return
+	}
+	if post.Type != 1 && post.Type != 2 {
+		RespFailed(c, CodeInvalidParam)
+		return
+	}
+	err = services.UpdatePost(post)
+	if err != nil {
+		if errors.Is(err, mysql.ErrorNoPermission) {
+			RespFailed(c, CodeNoPermission)
+			return
+		}
+		RespFailed(c, CodeServiceBusy)
+		g.Logger.Warn(fmt.Sprintf("%v", err))
+		return
+	}
+	RespSuccess(c, nil)
+}
+
+// DeletePost 删除某一条帖子
+func DeletePost(c *gin.Context) {
+	uid, ok := utils.GetCurrentUser(c)
+	if !ok {
+		RespFailed(c, CodeNeedLogin)
+		return
+	}
+	pidStr := c.Param("pid")
+	pid, err := strconv.ParseInt(pidStr, 10, 64)
+	if err != nil {
+		RespFailed(c, CodeInvalidParam)
+		return
+	}
+	err = services.DeletePost(uid, int(pid))
+	if err != nil {
+		if errors.Is(err, mysql.ErrorNoPermission) {
+			RespFailed(c, CodeNoPermission)
+			return
+		}
+		RespFailed(c, CodeServiceBusy)
+		g.Logger.Warn(fmt.Sprintf("%v", err))
+		return
+	}
+	RespSuccess(c, nil)
 }

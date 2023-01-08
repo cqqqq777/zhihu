@@ -178,3 +178,29 @@ func UserEssayList(page, size, uid int64) (data *model.ApiPostList, err error) {
 	data.TotalNum = num
 	return
 }
+
+func UpdatePost(post *model.Post) error {
+	authorId, err := mysql.GetAuthorIdByPid(post.Pid)
+	if err != nil {
+		return err
+	}
+	if authorId != post.AuthorID {
+		return mysql.ErrorNoPermission
+	}
+	err = mysql.UpdatePost(post)
+	redisdao.ClearPostCache(int64(post.Pid))
+	return err
+}
+
+func DeletePost(uid, pid int) error {
+	authorId, err := mysql.GetAuthorIdByPid(pid)
+	if err != nil {
+		return err
+	}
+	if authorId != uid {
+		return mysql.ErrorNoPermission
+	}
+	err = mysql.DeletePost(pid)
+	redisdao.ClearPostCache(int64(pid))
+	return err
+}
