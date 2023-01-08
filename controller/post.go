@@ -187,3 +187,19 @@ func DeletePost(c *gin.Context) {
 	}
 	RespSuccess(c, nil)
 }
+
+func SearchPost(c *gin.Context) {
+	key := c.Query("key")
+	if key == "" {
+		RespFailed(c, CodeInvalidParam)
+		return
+	}
+	page, size := utils.GetPageInfo(c)
+	data, err := services.SearchPosts(page, size, key)
+	if err != nil {
+		RespFailed(c, CodeServiceBusy)
+		g.Logger.Warn(fmt.Sprintf("%v", err))
+		return
+	}
+	RespSuccess(c, data)
+}

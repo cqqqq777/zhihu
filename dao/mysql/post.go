@@ -21,6 +21,8 @@ const (
 	GetAuthorIdByPidStr        = "select author_id from posts where pid = ?"
 	UpdatePostStr              = "update posts set type = ?,topic_id = ?,title = ?,content =? where pid =? "
 	DeletePostStr              = "delete from posts where pid = ?"
+	SearchPostsStr             = "select * from posts where title like ? ORDER BY create_time DESC limit ?,?"
+	SearchTotalNumStr          = "select count(pid) from posts where  title like ? "
 )
 
 func CheckQuestion(title string) error {
@@ -104,4 +106,15 @@ func UpdatePost(p *model.Post) error {
 func DeletePost(pid int) error {
 	_, err := g.Mdb.Exec(DeletePostStr, pid)
 	return err
+}
+
+func SearchPosts(page, size int64, key string) (posts []*model.PostDetail, err error) {
+	posts = make([]*model.PostDetail, 0, 2)
+	err = g.Mdb.Select(&posts, SearchPostsStr, "%"+key+"%", (page-1)*size, size)
+	return
+}
+
+func GetPostTotalNum(key string) (num int, err error) {
+	err = g.Mdb.Get(&num, SearchTotalNumStr, "%"+key+"%")
+	return
 }

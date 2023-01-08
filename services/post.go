@@ -204,3 +204,34 @@ func DeletePost(uid, pid int) error {
 	redisdao.ClearPostCache(int64(pid))
 	return err
 }
+
+func SearchPosts(page, size int64, key string) (data *model.ApiPostList, err error) {
+	posts, err := mysql.SearchPosts(page, size, key)
+	if err != nil {
+		return nil, err
+	}
+	data = new(model.ApiPostList)
+	data.Posts = make([]*model.PostDetail, 0, len(posts))
+	for _, post := range posts {
+		username, err := mysql.FindUsernameByUid(post.AuthorID)
+		if err != nil {
+			g.Logger.Warn(fmt.Sprintf("%v", err))
+			continue
+		}
+		topic, err := mysql.TopicDetails(int64(post.TopicID))
+		if err != nil {
+			g.Logger.Warn(fmt.Sprintf("%v", err))
+			continue
+		}
+		post.AuthorName = username
+		post.TopicDetail = topic
+		data.Posts = append(data.Posts, post)
+	}
+	var num int
+	num, err = mysql.GetPostTotalNum(key)
+	if err != nil {
+		return nil, err
+	}
+	data.TotalNum = num
+	return
+}

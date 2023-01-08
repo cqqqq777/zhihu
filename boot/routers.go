@@ -23,6 +23,7 @@ func InitRouters() {
 		public.GET("/post/:pid", controller.PostDetail)
 		public.GET("/questions", controller.QuestionList)
 		public.GET("/essays", controller.EssayList)
+		public.GET("/posts", controller.SearchPost)
 	}
 	private := v1.Group("")
 	private.Use(middleware.JWTAuth)
