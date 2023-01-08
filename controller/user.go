@@ -1,9 +1,11 @@
 package controller
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"strconv"
 	"zhihu/dao/mysql"
 	"zhihu/dao/redisdao"
 	g "zhihu/global"
@@ -80,11 +82,12 @@ func Login(c *gin.Context) {
 	var (
 		token string
 		err   error
+		uid   int
 	)
 	if utils.CheckEmail(ParamUser.UsernameOrEmail) {
-		token, err = services.LoginByEmail(ParamUser)
+		uid, token, err = services.LoginByEmail(ParamUser)
 	} else {
-		token, err = services.LoginByUsername(ParamUser)
+		uid, token, err = services.LoginByUsername(ParamUser)
 	}
 	//判断错误类型
 	if err != nil {
@@ -105,6 +108,7 @@ func Login(c *gin.Context) {
 	}
 	//返回token
 	RespSuccess(c, &model.ApiUser{
+		Uid:   uid,
 		Token: token,
 	})
 }
@@ -188,6 +192,57 @@ func ForgetPassword(c *gin.Context) {
 			return
 		}
 		RespFailed(c, CodeServiceBusy)
+		return
+	}
+	RespSuccess(c, nil)
+}
+
+func GetUserInfo(c *gin.Context) {
+	uidStr := c.Param("uid")
+	uid, err := strconv.ParseInt(uidStr, 10, 64)
+	if err != nil {
+		RespFailed(c, CodeInvalidParam)
+		return
+	}
+	data, err := services.GetUserInfo(uid)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			RespFailed(c, CodeInvalidId)
+			return
+		}
+		RespFailed(c, CodeServiceBusy)
+		g.Logger.Warn(fmt.Sprintf("%v", err))
+		return
+	}
+	RespSuccess(c, data)
+}
+
+func UpdateUserInfo(c *gin.Context) {
+	uidStr := c.Param("uid")
+	uid, err := strconv.ParseInt(uidStr, 10, 64)
+	if err != nil {
+		RespFailed(c, CodeInvalidParam)
+		return
+	}
+	reallyUid, ok := utils.GetCurrentUser(c)
+	if !ok {
+		RespFailed(c, CodeNeedLogin)
+		return
+	}
+	user := new(model.User)
+	if err = c.ShouldBindJSON(user); err != nil {
+		RespFailed(c, CodeInvalidParam)
+		return
+	}
+	user.Uid = reallyUid
+	err = services.UpdateUserInfo(int(uid), user)
+	if err != nil {
+		if errors.Is(err, mysql.ErrorNoPermission) {
+			RespFailed(c, CodeNoPermission)
+			return
+		}
+		RespFailed(c, CodeServiceBusy)
+		g.Logger.Warn(fmt.Sprintf("%v", err))
 		return
 	}
 	RespSuccess(c, nil)

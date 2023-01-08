@@ -101,48 +101,48 @@ func Register(ParamUser *model.ParamRegisterUser) error {
 	return mysql.AddUser(user)
 }
 
-func LoginByUsername(user *model.ParamLoginUser) (string, error) {
+func LoginByUsername(user *model.ParamLoginUser) (int, string, error) {
 	if err := mysql.CheckUsername(user.UsernameOrEmail); !errors.Is(err, mysql.ErrorUserExist) {
 		if err == nil {
-			return "", mysql.ErrorUserNotExist
+			return 0, "", mysql.ErrorUserNotExist
 		}
-		return "", err
+		return 0, "", err
 	}
 	password, err := mysql.FindPasswordByUsername(user.UsernameOrEmail)
 	if err != nil {
-		return "", err
+		return 0, "", err
 	}
 	if password != user.Password {
-		return "", mysql.ErrorWrongPassword
+		return 0, "", mysql.ErrorWrongPassword
 	}
 	uid, err := mysql.FindUid(user.UsernameOrEmail)
 	if err != nil {
-		return "", err
+		return 0, "", err
 	}
 	token, _ := utils.GenToken(uid)
-	return token, nil
+	return uid, token, nil
 }
 
-func LoginByEmail(user *model.ParamLoginUser) (string, error) {
+func LoginByEmail(user *model.ParamLoginUser) (int, string, error) {
 	if err := mysql.CheckEmail(user.UsernameOrEmail); !errors.Is(err, mysql.ErrorEmailExist) {
 		if err == nil {
-			return "", mysql.ErrorEmailNotExist
+			return 0, "", mysql.ErrorEmailNotExist
 		}
-		return "", err
+		return 0, "", err
 	}
 	password, err := mysql.FindPasswordByEmail(user.UsernameOrEmail)
 	if err != nil {
-		return "", err
+		return 0, "", err
 	}
 	if password != user.Password {
-		return "", mysql.ErrorWrongPassword
+		return 0, "", mysql.ErrorWrongPassword
 	}
 	uid, err := mysql.FindUid(user.UsernameOrEmail)
 	if err != nil {
-		return "", err
+		return 0, "", err
 	}
 	token, _ := utils.GenToken(uid)
-	return token, nil
+	return uid, token, nil
 }
 
 func RevisePassword(user *model.ParamReviseUser) error {
@@ -185,4 +185,17 @@ func ForgetPassword(user *model.ParamRegisterUser) error {
 		return err
 	}
 	return nil
+}
+
+func GetUserInfo(uid int64) (userInfo *model.User, err error) {
+	userInfo, err = mysql.GetUserInfo(uid)
+	return
+}
+
+func UpdateUserInfo(uid int, user *model.User) error {
+	if uid != user.Uid {
+		return mysql.ErrorNoPermission
+	}
+	err := mysql.UpdateUserInfo(user)
+	return err
 }

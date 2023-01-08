@@ -29,14 +29,18 @@ type ParamReviseUser struct {
 }
 
 type User struct {
-	Uid      int       `db:"uid"`
-	Username string    `db:"username"`
-	Password string    `db:"password"`
-	Email    string    `db:"email"`
-	CreateAt time.Time `db:"create_time"`
-	UpdateAt time.Time `db:"update_time"`
+	Id           int       `json:"id,omitempty" db:"id"`
+	Uid          int       `json:"uid" db:"uid"`
+	Gender       int       `json:"gender" db:"gender"`
+	Introduction string    `json:"introduction" db:"introduction"`
+	Username     string    `json:"username" db:"username"`
+	Password     string    `json:"-" db:"password"`
+	Email        string    `json:"email" db:"email"`
+	CreateTime   time.Time `json:"create_time" db:"create_time"`
+	UpdateTime   time.Time `json:"update_time" db:"update_time"`
 }
 
 type ApiUser struct {
+	Uid   int    `json:"uid"`
 	Token string `json:"token"`
 }

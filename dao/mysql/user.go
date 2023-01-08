@@ -16,6 +16,8 @@ const (
 	RevisePasswordStr         = "update users set password = ? where uid = ?"
 	ReviseUsernameStr         = "update users set username = ? where uid =?"
 	FindUsernameByUidStr      = "select username from users where uid = ?"
+	GetUserInfoStr            = "select uid,username,email,gender,introduction,create_time,update_time from users where uid = ?"
+	UpdateUserInfoStr         = "update  users set gender = ?,introduction = ? where uid = ? "
 )
 
 func CheckUsername(username string) error {
@@ -85,4 +87,15 @@ func FindUsernameByUid(uid int) (string, error) {
 	var username string
 	err := g.Mdb.Get(&username, FindUsernameByUidStr, uid)
 	return username, err
+}
+
+func GetUserInfo(uid int64) (user *model.User, err error) {
+	user = new(model.User)
+	err = g.Mdb.Get(user, GetUserInfoStr, uid)
+	return
+}
+
+func UpdateUserInfo(user *model.User) error {
+	_, err := g.Mdb.Exec(UpdateUserInfoStr, user.Gender, user.Introduction, user.Uid)
+	return err
 }
