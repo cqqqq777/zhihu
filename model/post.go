@@ -15,7 +15,8 @@ type Post struct {
 
 type PostDetail struct {
 	AuthorName string `json:"author_name"`
-	LikeCount  int    `json:"like_count"`
+	Stars      int64  `json:"stars"`
+	Started    bool   `json:"started"`
 	*Post
 	*TopicDetail `json:"topic"`
 }

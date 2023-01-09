@@ -18,6 +18,7 @@ const (
 	FindUsernameByUidStr      = "select username from users where uid = ?"
 	GetUserInfoStr            = "select uid,username,email,gender,introduction,create_time,update_time from users where uid = ?"
 	UpdateUserInfoStr         = "update  users set gender = ?,introduction = ? where uid = ? "
+	GetIdByUidStr             = "select id from users where uid =?"
 )
 
 func CheckUsername(username string) error {
@@ -98,4 +99,9 @@ func GetUserInfo(uid int64) (user *model.User, err error) {
 func UpdateUserInfo(user *model.User) error {
 	_, err := g.Mdb.Exec(UpdateUserInfoStr, user.Gender, user.Introduction, user.Uid)
 	return err
+}
+
+func GetIdByUid(uid int64) (id int64, err error) {
+	err = g.Mdb.Get(&id, GetIdByUidStr, uid)
+	return
 }

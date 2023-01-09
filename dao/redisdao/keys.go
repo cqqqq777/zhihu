@@ -11,9 +11,13 @@ func GetVerificationKey(email string) string {
 }
 
 func GetTopicDetailKey(tid int64) string {
-	return "topic:" + strconv.FormatInt(tid, 10)
+	return "topic:" + strconv.FormatInt(tid, 10) + ":detail"
 }
 
 func GetPostDetailKey(pid int64) string {
-	return "post:" + strconv.FormatInt(pid, 10)
+	return "post:" + strconv.FormatInt(pid, 10) + ":detail"
+}
+
+func GetStarPostKey(pid int64) string {
+	return "post:" + strconv.FormatInt(pid, 10) + ":stars"
 }

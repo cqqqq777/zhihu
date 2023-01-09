@@ -18,10 +18,10 @@ func InitRouters() {
 		public.POST("/verification", controller.PostVerification)
 		public.POST("/login", controller.Login)
 		public.PUT("/password/forget", controller.ForgetPassword)
-		public.GET("/user/:uid/info", controller.GetUserInfo)
+		public.GET("/users/:uid/info", controller.GetUserInfo)
 		public.GET("/topics", controller.GetAllTopic)
 		public.GET("/topics/:tid", controller.TopicDetail)
-		public.GET("/post/:pid", controller.PostDetail)
+		public.GET("/posts/:pid", controller.PostDetail)
 		public.GET("/questions", controller.QuestionList)
 		public.GET("/essays", controller.EssayList)
 		public.GET("/posts", controller.SearchPost)
@@ -32,12 +32,13 @@ func InitRouters() {
 	{
 		private.PUT("/password", controller.RevisePassword)
 		private.PUT("/username", controller.ReviseUsername)
-		private.PUT("/user/:uid/info", controller.UpdateUserInfo)
+		private.PUT("/users/:uid/info", controller.UpdateUserInfo)
 		private.POST("/post", controller.CreatePost)
 		private.GET("/user/questions", controller.UserQuestionList)
 		private.GET("/user/essays", controller.UserEssayList)
 		private.PUT("/posts/:pid", controller.UpdatePost)
 		private.DELETE("/posts/:pid", controller.DeletePost)
+		private.POST("/posts/:pid/star", controller.StarPost)
 	}
 	if err := r.Run(); err != nil {
 		panic(err)

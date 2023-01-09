@@ -50,8 +50,19 @@ func PostDetail(c *gin.Context) {
 		RespFailed(c, CodeInvalidParam)
 		return
 	}
+	uidStr := c.Request.Header.Get("uid")
+	var uid int64
+	if uidStr == "" {
+		uid = 0
+	} else {
+		uid, err = strconv.ParseInt(uidStr, 10, 64)
+	}
+	if err != nil {
+		RespFailed(c, CodeInvalidParam)
+		return
+	}
 	//获取数据
-	data, err := services.PostDetail(pid)
+	data, err := services.PostDetail(pid, uid)
 	if err != nil {
 		if err == mysql.ErrorInvalidId {
 			RespFailed(c, CodeInvalidId)
