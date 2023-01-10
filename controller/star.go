@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"strconv"
+	"zhihu/dao/redisdao"
 	g "zhihu/global"
 	"zhihu/services"
 	"zhihu/utils"
@@ -27,5 +28,6 @@ func StarPost(c *gin.Context) {
 		g.Logger.Warn(fmt.Sprintf("%v", err))
 		return
 	}
+	redisdao.ClearPostCache(pid)
 	RespSuccess(c, nil)
 }
