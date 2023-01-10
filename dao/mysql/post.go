@@ -23,6 +23,10 @@ const (
 	DeletePostStr              = "delete from posts where pid = ?"
 	SearchPostsStr             = "select * from posts where title like ? ORDER BY create_time DESC limit ?,?"
 	SearchTotalNumStr          = "select count(pid) from posts where  title like ? "
+	GetPidListStr              = "select pid from posts"
+	SyncPostStarsStr           = "update posts set stars = ? where pid =?"
+	GetHotPostListStr          = "select * from posts ORDER BY stars desc limit ?,?"
+	GetPostTotalNumStr         = "select count(pid) from posts "
 )
 
 func CheckQuestion(title string) error {
@@ -114,7 +118,29 @@ func SearchPosts(page, size int64, key string) (posts []*model.PostDetail, err e
 	return
 }
 
-func GetPostTotalNum(key string) (num int, err error) {
+func GetSearchPostTotalNum(key string) (num int, err error) {
 	err = g.Mdb.Get(&num, SearchTotalNumStr, "%"+key+"%")
+	return
+}
+
+func GetPidList() (pidList []int64, err error) {
+	pidList = make([]int64, 0)
+	err = g.Mdb.Select(&pidList, GetPidListStr)
+	return
+}
+
+func SyncPostStars(pid, stars int64) error {
+	_, err := g.Mdb.Exec(SyncPostStarsStr, stars, pid)
+	return err
+}
+
+func GetHotPostList(page, size int64) (posts []*model.PostDetail, err error) {
+	posts = make([]*model.PostDetail, 0)
+	err = g.Mdb.Select(&posts, GetHotPostListStr, (page-1)*size, size)
+	return
+}
+
+func GetPostTotalNum() (num int, err error) {
+	err = g.Mdb.Get(&num, GetPostTotalNumStr)
 	return
 }

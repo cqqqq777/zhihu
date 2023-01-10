@@ -24,6 +24,7 @@ func InitRouters() {
 		public.GET("/posts/:pid", controller.PostDetail)
 		public.GET("/questions", controller.QuestionList)
 		public.GET("/essays", controller.EssayList)
+		public.GET("/posts/hot", controller.GetHotPostList)
 		public.GET("/posts", controller.SearchPost)
 
 	}

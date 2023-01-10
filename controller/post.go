@@ -214,3 +214,13 @@ func SearchPost(c *gin.Context) {
 	}
 	RespSuccess(c, data)
 }
+
+func GetHotPostList(c *gin.Context) {
+	page, size := utils.GetPageInfo(c)
+	data, err := services.GetHotPostList(page, size)
+	if err != nil {
+		RespFailed(c, CodeServiceBusy)
+		return
+	}
+	RespSuccess(c, data)
+}
