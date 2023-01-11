@@ -16,12 +16,22 @@ func CancelStarPost(pid, uid int64) error {
 	return err
 }
 
-func GetUserStarStatus(pid, uid int64) (int64, error) {
-	intCmd := g.Rdb.GetBit(context.Background(), GetStarPostKey(pid), uid)
+func GetUserStarStatus(pid, id int64) (int64, error) {
+	intCmd := g.Rdb.GetBit(context.Background(), GetStarPostKey(pid), id)
 	return intCmd.Val(), intCmd.Err()
 }
 
 func GetPostStars(pid int64) (int64, error) {
 	intCmd := g.Rdb.BitCount(context.Background(), GetStarPostKey(pid), &redis.BitCount{})
+	return intCmd.Val(), intCmd.Err()
+}
+
+func GetCommentsStars(cid int64) (int64, error) {
+	intCmd := g.Rdb.BitCount(context.Background(), GetStarCommentKey(cid), &redis.BitCount{})
+	return intCmd.Val(), intCmd.Err()
+}
+
+func GetUserStarCommentStatus(cid, id int64) (int64, error) {
+	intCmd := g.Rdb.GetBit(context.Background(), GetStarCommentKey(cid), id)
 	return intCmd.Val(), intCmd.Err()
 }

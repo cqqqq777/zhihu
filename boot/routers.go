@@ -26,6 +26,7 @@ func InitRouters() {
 		public.GET("/essays", controller.EssayList)
 		public.GET("/posts/hot", controller.GetHotPostList)
 		public.GET("/posts", controller.SearchPost)
+		public.GET("/posts/:pid/comments", controller.PostCommentList)
 
 	}
 	private := v1.Group("")

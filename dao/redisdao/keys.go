@@ -21,3 +21,7 @@ func GetPostDetailKey(pid int64) string {
 func GetStarPostKey(pid int64) string {
 	return "post:" + strconv.FormatInt(pid, 10) + ":stars"
 }
+
+func GetStarCommentKey(cid int64) string {
+	return "comment:" + strconv.FormatInt(cid, 10) + ":stars"
+}
