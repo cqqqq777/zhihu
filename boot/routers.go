@@ -40,6 +40,7 @@ func InitRouters() {
 		private.PUT("/posts/:pid", controller.UpdatePost)
 		private.DELETE("/posts/:pid", controller.DeletePost)
 		private.POST("/posts/:pid/star", controller.StarPost)
+		private.POST("/comments", controller.CommentPost)
 	}
 	if err := r.Run(); err != nil {
 		panic(err)
