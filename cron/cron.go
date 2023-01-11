@@ -15,7 +15,7 @@ func Cron() {
 	if err != nil {
 		panic(err)
 	}
-	_, err = c.AddFunc("@every 1h", RedisToMysqlComment)
+	_, err = c.AddFunc("@every 5s", RedisToMysqlComment)
 	if err != nil {
 		panic(err)
 	}
@@ -42,5 +42,20 @@ func RedisToMysqlPost() {
 }
 
 func RedisToMysqlComment() {
-
+	cidList, err := mysql.GetCidList()
+	if err != nil {
+		g.Logger.Warn(fmt.Sprintf("failed to sync comments stars  err:%v", err))
+		return
+	}
+	for _, v := range cidList {
+		stars, err := redisdao.GetCommentsStars(v)
+		if err != nil {
+			g.Logger.Warn(fmt.Sprintf("sync cid:%d stars failed err:%v", v, err))
+			continue
+		}
+		err = mysql.SyncCommentStars(v, stars)
+		if err != nil {
+			g.Logger.Warn(fmt.Sprintf("sync cid:%d stars failed err:%v", v, err))
+		}
+	}
 }

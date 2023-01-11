@@ -27,6 +27,7 @@ const (
 	SyncPostStarsStr           = "update posts set stars = ? where pid =?"
 	GetHotPostListStr          = "select * from posts ORDER BY stars desc limit ?,?"
 	GetPostTotalNumStr         = "select count(pid) from posts "
+	GetRecommendPostListStr    = "select * from posts order by rand()limit 10"
 )
 
 func CheckQuestion(title string) error {
@@ -142,5 +143,11 @@ func GetHotPostList(page, size int64) (posts []*model.PostDetail, err error) {
 
 func GetPostTotalNum() (num int, err error) {
 	err = g.Mdb.Get(&num, GetPostTotalNumStr)
+	return
+}
+
+func GetRecommendPostList() (posts []*model.PostDetail, err error) {
+	posts = make([]*model.PostDetail, 0)
+	err = g.Mdb.Select(&posts, GetRecommendPostListStr)
 	return
 }

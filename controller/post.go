@@ -224,3 +224,13 @@ func GetHotPostList(c *gin.Context) {
 	}
 	RespSuccess(c, data)
 }
+
+func RecommendPost(c *gin.Context) {
+	data, err := services.RecommendPost()
+	if err != nil {
+		RespFailed(c, CodeServiceBusy)
+		g.Logger.Error(err.Error())
+		return
+	}
+	RespSuccess(c, data)
+}

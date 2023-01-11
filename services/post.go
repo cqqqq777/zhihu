@@ -286,3 +286,35 @@ func GetHotPostList(page, size int64) (data *model.ApiPostList, err error) {
 	data.TotalNum = num
 	return
 }
+
+func RecommendPost() (data *model.ApiPostList, err error) {
+	posts, err := mysql.GetRecommendPostList()
+	if err != nil {
+		g.Logger.Warn(fmt.Sprintf("%v", err))
+		return nil, err
+	}
+	data = new(model.ApiPostList)
+	data.Posts = make([]*model.PostDetail, 0, len(posts))
+	for _, post := range posts {
+		username, err := mysql.FindUsernameByUid(post.AuthorID)
+		if err != nil {
+			g.Logger.Warn(fmt.Sprintf("%v", err))
+			continue
+		}
+		topic, err := mysql.TopicDetails(int64(post.TopicID))
+		if err != nil {
+			g.Logger.Warn(fmt.Sprintf("%v", err))
+			continue
+		}
+		post.AuthorName = username
+		post.TopicDetail = topic
+		data.Posts = append(data.Posts, post)
+	}
+	var num int
+	num, err = mysql.GetPostTotalNum()
+	if err != nil {
+		return nil, err
+	}
+	data.TotalNum = num
+	return
+}

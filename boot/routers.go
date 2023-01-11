@@ -27,7 +27,8 @@ func InitRouters() {
 		public.GET("/posts/hot", controller.GetHotPostList)
 		public.GET("/posts", controller.SearchPost)
 		public.GET("/posts/:pid/comments", controller.PostCommentList)
-
+		public.GET("/comments/:cid/replies", controller.ReplyList)
+		public.GET("/posts/recommend", controller.RecommendPost)
 	}
 	private := v1.Group("")
 	private.Use(middleware.JWTAuth)
@@ -42,6 +43,10 @@ func InitRouters() {
 		private.DELETE("/posts/:pid", controller.DeletePost)
 		private.POST("/posts/:pid/star", controller.StarPost)
 		private.POST("/comments", controller.CommentPost)
+		private.POST("/comments/reply", controller.ReplyComment)
+		private.POST("/comments/:cid/star", controller.StarComment)
+		private.GET("/user/replies", controller.UserReplies)
+		private.DELETE("/comments/:cid", controller.DeleteComment)
 	}
 	if err := r.Run(); err != nil {
 		panic(err)
